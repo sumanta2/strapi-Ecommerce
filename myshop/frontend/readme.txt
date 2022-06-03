@@ -1,0 +1,1 @@
+in 5th commit we create a folder name backend all backend / strapi's required files are store in a backend folder 
