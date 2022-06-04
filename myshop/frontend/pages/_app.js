@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import Navbar from "../components/Navbar";
 import { useEffect, useState } from "react"
+import Footer from '../components/Footer';
 
 
 function MyApp({ Component, pageProps }) {
@@ -34,7 +35,7 @@ function MyApp({ Component, pageProps }) {
     setCart([])
     setReloadKey(Math.random())
   }
-  return (<> <Navbar key={ReloadKey} cart={cart} /> <Component cart={cart} removeFromCart={removeFromCart} addToCart={addToCart} cl {...pageProps} /></>)
+  return (<> <Navbar key={ReloadKey} cart={cart} /> <Component cart={cart} removeFromCart={removeFromCart} addToCart={addToCart} cl {...pageProps} /><Footer/></>)
 }
 
 export default MyApp
