@@ -2,9 +2,13 @@ import '../styles/globals.css'
 import Navbar from "../components/Navbar";
 import { useEffect, useState } from "react"
 import Footer from '../components/Footer';
+import Head from 'next/head';
 
 
 function MyApp({ Component, pageProps }) {
+  <Head>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0"/>
+  </Head>
   const [ReloadKey, setReloadKey] = useState(1)
   useEffect(() => {
 
@@ -13,13 +17,11 @@ function MyApp({ Component, pageProps }) {
   const [cart, setCart] = useState([])
 
   const addToCart = (item, qty,price) => {
-    console.log(item)
     let newCart = cart
     for (let index = 0; index < qty; index++) {
       newCart.push([item,price])
       setReloadKey(Math.random())
     }
-
 
     setCart(newCart)
   }

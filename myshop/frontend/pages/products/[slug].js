@@ -9,7 +9,11 @@ const Slug = ({product,addToCart}) => {
       <section className="text-gray-600 body-font overflow-hidden">
         <div className="container px-5 py-24 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">
-            <img alt="ecommerce" className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src="https://dummyimage.com/400x400"/>
+
+
+            <div className="w-full lg:w-1/4 lg:h-auto">
+            <img alt="ecommerce" className=" mx-auto w-1/2 lg:w-auto  rounded" src={product.attributes.image.data.attributes.name}/>
+            </div>
               <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
                 <h2 className="text-sm title-font text-gray-500 tracking-widest">My Shop</h2>
                 <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">{product.attributes.title}</h1>
@@ -82,7 +86,7 @@ export async function getServerSideProps(context) {
 
   //const url=process.env.NEXT_PUBLIC_url
   //const url="http://localhost:1337/api/products?filters[slug]=gloves"
-  const url=`${process.env.NEXT_PUBLIC_url1}${context.query.slug}`
+  const url=`${process.env.NEXT_PUBLIC_url1}${context.query.slug}&populate=*`
   const authToken=process.env.authToken
 
   let a = await fetch(url,
@@ -92,7 +96,6 @@ export async function getServerSideProps(context) {
       }
     })
   let product = await a.json()
-  // console.log(products)
 
   return {
     props: { product: product.data[0] },

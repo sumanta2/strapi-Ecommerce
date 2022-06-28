@@ -14,3 +14,11 @@ in fontend api header section we need pass api token which need created in strap
 to get image details in return json we need to add ?populate=* in request query like http://localhost:1337/api/products?populate=*
 
 video 3 create backend endpoint of api through super admin role
+yarn add paytmchecksum comment use to install paytmchecksum package which help to initiate paytm transaction
+
+46.00
+
+
+
+userId:  sumantagorai.21@gmail.com
+Password:Aa123456@
