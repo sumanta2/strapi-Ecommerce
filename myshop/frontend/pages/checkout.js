@@ -14,7 +14,7 @@ const checkout = ({ cart }) => {
     }
     for (let index = 0; index < (cart.length); index++) {
       myTotal += cart[index][1]
-      console.log("---"+myTotal,"---"+cart.length)
+      // console.log("---"+myTotal,"---"+cart.length)
     }
     setSubTotal(myTotal) 
     isMounted.current=true
@@ -32,10 +32,10 @@ const checkout = ({ cart }) => {
     let url = "http://localhost:1337/api/orders/pretransaction"
     const rawResponse = await fetch(url, {
       method: 'POST',
-      body: JSON.stringify({ orderid: oid, amount: SubTotal })
+      body: JSON.stringify({ orderid: oid, amount: SubTotal, ...form, cart:cart})
     });
     const content = await rawResponse.json()
-    console.log(typeof(content.body.txnToken))
+    //console.log(typeof(content.body.txnToken))
 
 
     var config = {
@@ -55,18 +55,17 @@ const checkout = ({ cart }) => {
         }
       }
     };
-    console.log("Check Here"+SubTotal)
+    // console.log("Check Here"+SubTotal)
     if (window.Paytm && window.Paytm.CheckoutJS) {
 
       window.Paytm.CheckoutJS.init(config).then(function onSuccess() {
 
         window.Paytm.CheckoutJS.invoke();
       }).catch(function onError(error) {
-        console.log("error IS HERE => ", error);
+        //console.log("error IS HERE => ", error);
 
       });
     }
-
   }
 
 
@@ -84,7 +83,7 @@ const checkout = ({ cart }) => {
               {
                 cart.map((item, data) => (
                   <li key={data} className="list-decimal">
-                    {`${item[0]} with a price of ${item[1]}`}
+                    Product {`${item[0]} with a price of ₹${item[1]}`}
                   </li>)
                 )
               }

@@ -8,4 +8,6 @@ here use paytm js checkout for accept payment of a product https://business.payt
 
 tokensession expire error in myfontend
 
-video see 1:00:00
+video 9 complete
+
+IN vdo 10 deployment of this application in digitalocean  server so this video i skipped

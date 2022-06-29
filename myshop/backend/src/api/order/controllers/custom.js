@@ -7,7 +7,7 @@ const { createCoreController } = require('@strapi/strapi').factories;
 
 module.exports = createCoreController('api::order.order', ({ strapi }) => ({
   // Method 1: Creating an entirely custom action
-  async exampleAction(ctx) {
+  async pre(ctx) {
     /*
     * import checksum generation utility
     * You can get this utility from https://developer.paytm.com/docs/checksum/
@@ -15,13 +15,26 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
 
     var paytmParams = {};
     //console.log(ctx.request.body)
-    let params=JSON.parse(ctx.request.body)
-    //console.log(params)
-    // console.log(process.env.MID)
-    // console.log(process.env.MKEY)
-   
+    let params = JSON.parse(ctx.request.body)
+    //params.orderid="oid"+params.orderid
+    // console.log(params)
+    const entry = await strapi.entityService.create('api::order.order', {
+      data: {
+        email: params.email,
+        orderid: params.orderid,
+        paymentInfo: null,
+        product: params.cart,
+        address: params.address,
+        name: params.name,
+        transactionid: null,
+        amount: params.amount,
+        status: "pending",
+      },
+    });
+
     paytmParams.body = {
       "requestType": "Payment",
+      "OBJID": entry.id,
       "mid": process.env.MID,
       "websiteName": "WEBSTAGING",
       "orderId": params.orderid,
@@ -54,7 +67,7 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
 
           /* for Production */
           //hostname: 'securegw.paytm.in',
-          
+
           port: 443,
           path: `/theia/api/v1/initiateTransaction?mid=${process.env.MID}&orderId=${params.orderid}`,
           method: 'POST',
@@ -71,9 +84,7 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
           });
 
           post_res.on('end', function () {
-            //console.log('Response: ', response);
             resolve(response);
-            //return response
           });
         });
 
@@ -83,8 +94,34 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
     }
 
     let myr = await gettoken()
-    
+
     ctx.send(JSON.parse(myr))
+  },
+
+  async post(ctx) {
+    /*
+    * import checksum generation utility
+    * You can get this utility from https://developer.paytm.com/docs/checksum/
+    */
+
+    var paytmParams = {};
+    let params = ctx.request.body
+    const entries = await strapi.entityService.findMany('api::order.order', {
+      fields: ["id"],
+      filters: { orderid: params.ORDERID }
+    });
+    let id = entries[0].id
+    const entry = await strapi.entityService.update('api::order.order', id, {
+      data: {
+        transactionid: params.TXNID,
+        paymentInfo: params,
+        status: params.STATUS
+      },
+    });
+    ctx.response.body=params
+    //console.log(ctx.response.body)
+    ctx.redirect(`http://localhost:3000/success?id=${id}`)
+
   },
 
 }));
